@@ -74,8 +74,11 @@
        linkElement.style.display = 'block'; // Asegurarse de que el enlace sea visible
      }
 
-     // Evento de clic en el botón para generar el enlace
-     document.getElementById('getLinkButton').addEventListener('click', generateLink);
+     // Esperar a que el documento se haya cargado completamente
+     document.addEventListener("DOMContentLoaded", function() {
+       // Evento de clic en el botón para generar el enlace
+       document.getElementById('getLinkButton').addEventListener('click', generateLink);
+     });
   </script>
 
   <style>

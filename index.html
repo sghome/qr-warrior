@@ -6,6 +6,10 @@
   <title>Enlaces por IP</title>
 
 
+
+
+
+  
    <script>
   // Lista de enlaces disponibles
     const links = [
@@ -147,6 +151,58 @@
   </style>
 </head>
 <body>
+
+
+  <div id='hero'>
+  <div class='layer-bg layer' data-depth='0.10' data-type='parallax'></div>
+  <div class='layer-1 layer' data-depth='0.20' data-type='parallax'></div>
+  <div class='layer-2 layer' data-depth='0.50' data-type='parallax'></div>
+  <div class='layer-3 layer' data-depth='0.80' data-type='parallax'></div>
+  <div class='layer-overlay layer' data-depth='0.85' data-type='parallax'></div>
+  <div class='layer-4 layer' data-depth='1.00' data-type='parallax'></div>
+</div>
+
+<div id='hero-mobile'></div>
+<div id='content'>
+  <!-- Logo SVG agregado antes del texto -->
+  <img id="logo" src="https://cdn.glitch.global/c536c49d-7661-4fd9-81b8-918d12539028/salchi-warrior.svg" alt="Logo">
+
+  <div class='container'>
+    <section class='first-section'>
+      <div class='row'>
+        <div class='col-sm-6'>
+          <h1>¡Participa por una salchi papa!</h1>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-sm-6'>
+          <p>¿Eres uno de los primeros 10 en llegar? Descarga nuestro código QR y reclama una deliciosa salchipapa. ¡Sólo hay 10 cupos disponibles!</p>
+          <p>Ésta es tu oportunidad de disfrutar gratis de una deliciosa experiencia. No olvides compartir esta actividad con tus amigos y vivir la experiencia juntos.</p>
+          <p>¡Es rápido y sencillo! Da click en el siguiente botón el cual generará un código QR, descárgalo, y sé uno de los 10 afortunados en ganar tu premio.</p>
+        </div>
+        <div class='col-sm-6'>
+          <p>Recuerda: la promoción es válida sólo para las primeras 10 personas. Una vez hayas descargado el código QR, preséntalo en el punto de canje y disfruta tu salchipapa.</p>
+          <p>¡Date prisa! Los cupos son limitados y se acaban rápido.</p>
+
+          <div id="getLinkButton" class="button">
+            <span>Descarga aquí el código QR</span>
+          </div>
+
+          <a id="dynamicLink" href="#" target="_blank" style="display:none;">Abrir enlace</a>
+
+          <!-- Mensaje de completado -->
+          <div id="message" style="display:none;">
+            <p>¡Ya se han completado los usuarios registrados! Pero igualmente, puedes seguirnos en nuestras redes sociales.</p>
+            <a href="https://www.facebook.com">Síguenos en Facebook</a> |
+            <a href="https://www.instagram.com">Síguenos en Instagram</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+  
+  
   <div id="content">
     <h1>¡Genera tu enlace único!</h1>
     <p>Cada usuario puede obtener un único enlace para descargar el código PDF. ¡Sé rápido antes de que se acaben los enlaces!</p>
@@ -163,6 +219,8 @@
       <p>QR Usados: <span id="usedLinksCount">0</span></p>
       <p>QR Disponibles: <span id="availableLinksCount">0</span></p>
     </div>
-  </div>
+ 
+
+  
 </body>
 </html>

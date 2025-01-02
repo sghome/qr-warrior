@@ -7,9 +7,9 @@
   <script>
     // Lista de enlaces disponibles
     const links = [
-      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=ad415fb4-aaa6-48eb-bef6-b959e647a6eb&inline=true', usedBy: null },
-      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=b39924a8-7f0e-486e-8741-1a0d00025ec7&inline=true', usedBy: null },
-      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=43466a81-37df-4a48-991d-148c982b385c&inline=true', usedBy: null },
+      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=ad415fb4-aaa6-48eb-bef6-b959e647a6eb&inline=true', used: false },
+      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=b39924a8-7f0e-486e-8741-1a0d00025ec7&inline=true', used: false },
+      { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=43466a81-37df-4a48-991d-148c982b385c&inline=true', used: false },
     ];
 
     // Función para obtener la IP pública del usuario
@@ -19,81 +19,118 @@
       return data.ip;
     }
 
-    // Función para almacenar o recuperar el registro de IPs y enlaces
+    // Función para registrar enlaces usados y asignar uno nuevo
     function getStorageData() {
-      const data = localStorage.getItem('ipLinks');
-      return data ? JSON.parse(data) : {};
+      const data = localStorage.getItem('assignedLinks');
+      return data ? JSON.parse(data) : { usedLinks: [], ipRecords: {} };
     }
 
-    // Función para guardar el registro de IPs y enlaces
     function saveStorageData(data) {
-      localStorage.setItem('ipLinks', JSON.stringify(data));
+      localStorage.setItem('assignedLinks', JSON.stringify(data));
     }
 
-    // Función para generar y mostrar el enlace
-    async function generateLink() {
-      const ip = await getUserIP(); // Obtener la IP del usuario
-      const ipLinks = getStorageData(); // Obtener los registros actuales de IPs y enlaces
+    function updateCounter() {
+      const storageData = getStorageData();
+      const totalLinks = links.length;
+      const usedLinks = storageData.usedLinks.length;
+      const availableLinks = totalLinks - usedLinks;
 
-      // Verificar si esta IP ya ha visitado todos los enlaces
-      if (Object.keys(ipLinks).length === links.length) {
-        document.getElementById('message').style.display = 'block'; // Mostrar el mensaje
-        return;
-      }
+      document.getElementById('usedLinksCount').innerText = usedLinks;
+      document.getElementById('availableLinksCount').innerText = availableLinks;
+    }
+
+    async function generateLink() {
+      const ip = await getUserIP(); // Obtener IP
+      const storageData = getStorageData(); // Obtener datos del almacenamiento local
 
       // Verificar si la IP ya tiene un enlace asignado
-      if (ipLinks[ip]) {
-        alert('Esta IP ya ha descargado un enlace.');
+      if (storageData.ipRecords[ip]) {
+        alert('Ya tienes un enlace asignado.');
+        const linkElement = document.getElementById('dynamicLink');
+        linkElement.href = storageData.ipRecords[ip];
+        linkElement.innerText = 'Volver a tu enlace asignado';
+        linkElement.style.display = 'block';
+        updateCounter();
         return;
       }
 
-      // Buscar un enlace disponible
-      const availableLink = links.find(link => link.usedBy === null);
+      // Buscar el siguiente enlace disponible
+      const nextLink = links.find(link => !storageData.usedLinks.includes(link.url));
 
-      if (!availableLink) {
+      if (!nextLink) {
         alert('No hay más enlaces disponibles.');
+        document.getElementById('message').style.display = 'block';
         return;
       }
 
-      // Asignar el enlace a la IP
-      ipLinks[ip] = availableLink.url;
-      availableLink.usedBy = ip; // Marcar que este enlace ha sido usado por esta IP
-      saveStorageData(ipLinks);
+      // Asignar el enlace y registrar la IP
+      storageData.ipRecords[ip] = nextLink.url;
+      storageData.usedLinks.push(nextLink.url);
+      saveStorageData(storageData);
 
-      // Mostrar el enlace en el navegador
+      // Mostrar el enlace al usuario
       const linkElement = document.getElementById('dynamicLink');
-      linkElement.href = availableLink.url;
-      linkElement.target = '_blank'; // Abrir en una nueva ventana
-      linkElement.innerText = `Descargar Código PDF`;
-      linkElement.style.display = 'block'; // Asegurarse de que el enlace sea visible
+      linkElement.href = nextLink.url;
+      linkElement.innerText = 'Descargar Código PDF';
+      linkElement.style.display = 'block';
+
+      // Actualizar contador
+      updateCounter();
     }
 
-    // Esperar a que el documento se haya cargado completamente
-    document.addEventListener("DOMContentLoaded", function() {
-      // Evento de clic en el botón para generar el enlace
+    document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('getLinkButton').addEventListener('click', generateLink);
+      updateCounter(); // Inicializar el contador al cargar la página
     });
   </script>
   <style>
-    /* Estilos básicos */
+    /* Restablecer diseño básico */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
     #content {
       text-align: center;
-      padding: 20px;
+      padding: 50px 20px;
     }
     #getLinkButton {
       background-color: #4CAF50;
       color: white;
       padding: 10px 20px;
+      font-size: 16px;
       cursor: pointer;
+      border: none;
       border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    #getLinkButton:hover {
+      background-color: #45a049;
     }
     #dynamicLink {
       display: none;
       margin-top: 20px;
+      font-size: 18px;
+      color: #007BFF;
+      text-decoration: none;
+    }
+    #dynamicLink:hover {
+      text-decoration: underline;
     }
     #message {
-      margin-top: 20px;
       display: none;
+      margin-top: 20px;
+      font-size: 18px;
+      color: red;
+    }
+    .counter {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .counter span {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -106,9 +143,13 @@
 
     <a id="dynamicLink" href="#" target="_blank"></a>
 
-    <!-- Mensaje si los enlaces se han agotado -->
     <div id="message">
       <p>¡Todos los enlaces han sido asignados! Gracias por participar.</p>
+    </div>
+
+    <div class="counter">
+      <p>Enlaces usados: <span id="usedLinksCount">0</span></p>
+      <p>Enlaces disponibles: <span id="availableLinksCount">0</span></p>
     </div>
   </div>
 </body>

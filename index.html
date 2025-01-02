@@ -196,12 +196,33 @@
           <p>Recuerda: la promoción es válida sólo para las primeras 10 personas. Una vez hayas descargado el código QR, preséntalo en el punto de canje y disfruta tu salchipapa.</p>
           <p>¡Date prisa! Los cupos son limitados y se acaban rápido.</p>
 
-          <div id="getLinkButton" class="button">
+  
+
+
+
+           <h1>¡Genera tu enlace único!</h1>
+    <p>Cada usuario puede obtener un único enlace para descargar el código PDF. ¡Sé rápido antes de que se acaben los enlaces!</p>
+
+ 
+           <div id="getLinkButton" class="button">
             <span>Descarga aquí el código QR</span>
           </div>
 
           <a id="dynamicLink" href="#" target="_blank" style="display:none;">Abrir enlace</a>
 
+          
+
+    <div id="message">
+      <p>¡Todos los enlaces han sido asignados! Gracias por participar.</p>
+    </div>
+
+    <div class="counter">
+      <p>QR Usados: <span id="usedLinksCount">0</span></p>
+      <p>QR Disponibles: <span id="availableLinksCount">0</span></p>
+    </div>
+          
+
+          
           <!-- Mensaje de completado -->
           <div id="message" style="display:none;">
             <p>¡Ya se han completado los usuarios registrados! Pero igualmente, puedes seguirnos en nuestras redes sociales.</p>
@@ -215,23 +236,8 @@
 </div>
   
   
-  <div id="content">
-    <h1>¡Genera tu enlace único!</h1>
-    <p>Cada usuario puede obtener un único enlace para descargar el código PDF. ¡Sé rápido antes de que se acaben los enlaces!</p>
-
-    <button id="getLinkButton">Generar enlace de descarga</button>
-
-    <a id="dynamicLink" href="#" target="_blank"></a>
-
-    <div id="message">
-      <p>¡Todos los enlaces han sido asignados! Gracias por participar.</p>
-    </div>
-
-    <div class="counter">
-      <p>QR Usados: <span id="usedLinksCount">0</span></p>
-      <p>QR Disponibles: <span id="availableLinksCount">0</span></p>
-    </div>
  
+  
 <script src="./script.js"></script>
   
 </body>

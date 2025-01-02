@@ -95,6 +95,7 @@ p {
     display: block;
   }
 }
+
 .tutorial-link {
   color: #fff;
   font-size: 18px;
@@ -104,19 +105,11 @@ p {
   color: #ede0d5;
 }
 
-
-
-
-
-
-
-
-
-
+/* Ajustes para el botón */
 .button {
   border: 1px solid #fff;
-  padding: 25px 50px;
-  border-radius: 15px;
+  padding: 12px 25px; /* Reducido el tamaño del padding para hacer el botón más pequeño */
+  border-radius: 10px; /* Reduje el radio para un borde más suave */
   cursor: pointer;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -128,7 +121,7 @@ p {
 
 .button span {
   color: #fff;
-  font-size: 40px;
+  font-size: 20px; /* Reducido el tamaño de la fuente para que sea más pequeño */
   font-family: "Quicksand", sans-serif;
   -webkit-transition: color 100ms linear;
   -ms-transition: color 100ms linear;

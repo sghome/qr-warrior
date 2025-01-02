@@ -8,6 +8,79 @@
 <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
 <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css'><link rel="stylesheet" href="./style.css">
 
+
+
+
+
+<script>
+   // Lista de enlaces disponibles
+   const links = [
+     { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=ad415fb4-aaa6-48eb-bef6-b959e647a6eb&inline=true', usedBy: null },
+     { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=b39924a8-7f0e-486e-8741-1a0d00025ec7&inline=true', usedBy: null },
+     { url: 'https://backend.trak.codes/api/v0/pdf/single-case?source=GSheets&filename=pass.pdf&cextid=43466a81-37df-4a48-991d-148c982b385c&inline=true', usedBy: null },
+   ];
+
+   // Función para obtener la IP pública del usuario
+   async function getUserIP() {
+     const response = await fetch('https://api.ipify.org?format=json');
+     const data = await response.json();
+     return data.ip;
+   }
+
+   // Función para almacenar o recuperar el registro de IPs y enlaces
+   function getStorageData() {
+     const data = localStorage.getItem('ipLinks');
+     return data ? JSON.parse(data) : {};
+   }
+
+   // Función para guardar el registro de IPs y enlaces
+   function saveStorageData(data) {
+     localStorage.setItem('ipLinks', JSON.stringify(data));
+   }
+
+   // Función para generar y mostrar el enlace
+   async function generateLink() {
+     const ip = await getUserIP(); // Obtener la IP del usuario
+     const ipLinks = getStorageData(); // Obtener los registros actuales de IPs y enlaces
+
+     // Verificar si esta IP ya ha visitado todos los enlaces
+     if (Object.keys(ipLinks).length === links.length) {
+       document.getElementById('message').style.display = 'block'; // Mostrar el mensaje
+       return;
+     }
+
+     // Verificar si la IP ya tiene un enlace asignado
+     if (ipLinks[ip]) {
+       alert('Esta IP ya ha descargado un enlace.');
+       return;
+     }
+
+     // Buscar un enlace disponible
+     const availableLink = links.find(link => link.usedBy === null);
+
+     if (!availableLink) {
+       alert('No hay más enlaces disponibles.');
+       return;
+     }
+
+     // Asignar el enlace a la IP
+     ipLinks[ip] = availableLink.url;
+     availableLink.usedBy = ip; // Marcar que este enlace ha sido usado por esta IP
+     saveStorageData(ipLinks);
+
+     // Mostrar el enlace en el navegador
+     const linkElement = document.getElementById('dynamicLink');
+     linkElement.href = availableLink.url;
+     linkElement.innerText = `Descargar Código PDF: ${availableLink.url}`;
+     linkElement.style.display = 'block';
+   }
+
+   // Evento de clic en el botón para generar el enlace
+   document.getElementById('getLinkButton').addEventListener('click', generateLink);
+ </script>
+
+
+
 <style>
    /* CSS para centrar el logo y los textos */
    #logo {
@@ -61,9 +134,21 @@
  <a id="dynamicLink" href="#" target="_blank" style="display:none;">Open Link</a>
 
 
+
+
+ <!-- Mensaje de completado -->
+ <div id="message" style="display:none;">
+   <p>¡Ya se han completado los usuarios registrados! Pero igualmente, puedes seguirnos en nuestras redes sociales.</p>
+   <a href="https://www.facebook.com">Síguenos en Facebook</a> |
+   <a href="https://www.instagram.com">Síguenos en Instagram</a>
+ </div>
+ 
+
     </div>
   </div>
       </div>
+
+
 
 
 
@@ -79,24 +164,7 @@
 <!-- partial -->
   <script  src="./script.js"></script>
 
-  <script>
-   document.getElementById('getLinkButton').addEventListener('click', async () => {
-     try {
-       const response = await fetch('/api/getLink');
-       if (response.ok) {
-         const data = await response.json();
-         const linkElement = document.getElementById('dynamicLink');
-         linkElement.href = data.link;
-         linkElement.style.display = 'block';
-         linkElement.innerText = `Go to ${data.link}`;
-       } else {
-         alert('No more links available');
-       }
-     } catch (error) {
-       console.error('Error fetching the link:', error);
-     }
-   });
- </script>
+
 
 </body>
 </html>

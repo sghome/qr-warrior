@@ -1,0 +1,9 @@
+{
+  "name": "links-dynamic",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "mongoose": "^6.0.0",
+    "dotenv": "^16.0.0"
+  }
+}
